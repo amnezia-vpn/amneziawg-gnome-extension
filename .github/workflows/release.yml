@@ -15,15 +15,6 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y make zip jq
       - name: Build extension
         run: make
-      - name: Locate built ZIP file
-        id: find_zip
-        run: |
-          ZIP_FILE=$(ls *.zip | head -n 1)
-          if [ -z "$ZIP_FILE" ]; then
-            echo "No ZIP file found!"
-            exit 1
-          fi
-          echo "ZIP_FILE=$ZIP_FILE" >> $GITHUB_ENV
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -40,6 +31,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.ZIP_FILE }}
-          asset_name: ${{ env.ZIP_FILE }}
+          asset_path: toggle-awg@amnezia-vpn.shell-extension.zip
+          asset_name: toggle-awg@amnezia-vpn.shell-extension.zip
           asset_content_type: application/zip
