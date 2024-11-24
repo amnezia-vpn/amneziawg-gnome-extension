@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extensions">
+	<schema
+	    id="org.gnome.shell.extensions.toggle-awg"
+	    path="/org/gnome/shell/extensions/toggle-awg/">
+
+            <key name="interface" type="s">
+                <default>"awg1"</default>
+                <summary>"Interface"</summary>
+	    </key>
+            <key name="icon-size" type="i">
+                <default>32</default>
+                <summary>"Icon Size"</summary>
+                <description>"The size of the toggle button icon in pixels"</description>
+            </key>
+            <key name="manual-theme" type="s">
+                <default>"dark"</default>
+                <summary>"Manual Theme Selection"</summary>
+            </key>
+    </schema>
+</schemalist>

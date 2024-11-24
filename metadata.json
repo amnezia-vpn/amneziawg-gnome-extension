@@ -1,0 +1,9 @@
+{
+    "uuid": "toggle-awg@amnezia-vpn",
+    "name": "AmneziaWG Toggle Button",
+    "description": "A button to toggle AmneziaWG service on/off",
+    "shell-version": ["43"],
+    "url": "https://github.com/amnezia-vpn/toggle-awg-gnome-shell",
+    "settings-schema": "org.gnome.shell.extensions.toggle-awg",
+    "version": 1
+}
