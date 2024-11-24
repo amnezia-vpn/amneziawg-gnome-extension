@@ -4,7 +4,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 let settings;
 
 function init() {
-    settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.toggle-awg');
+    settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.amneziawg');
 }
 
 /**
@@ -147,6 +147,7 @@ function buildPrefsWidget() {
     });
 
     saveButton.connect('clicked', () => {
+        settings.set_string('interface', interfaceEntry.text);
         settings.sync(); // Ensure settings are saved immediately
     });
 

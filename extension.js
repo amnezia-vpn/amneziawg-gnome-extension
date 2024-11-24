@@ -84,7 +84,7 @@ class Extension {
 
     enable() {
         this._button = null;
-        this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.toggle-awg');
+        this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.amneziawg');
         this._initializeDefaults();
         const toggleAWG = new ToggleAWG(this._settings);
         this._button = new ToggleAWGButton(toggleAWG, this._settings);
