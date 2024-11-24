@@ -9,9 +9,9 @@ all: $(ZIP_NAME)
 $(ZIP_NAME):
 	rm -f schemas/gschemas.compiled
 	glib-compile-schemas ./schemas
-	zip -r $(ZIP_NAME) metadata.json icons/ schemas/ prefs.js extension.js
+	zip -r $(ZIP_NAME) metadata.json icons/ schemas/ prefs.js extension.js README.md LICENSE
 
-install:
+install: $(ZIP_NAME)
 	gnome-extensions install -f $(ZIP_NAME)
 
 clean:

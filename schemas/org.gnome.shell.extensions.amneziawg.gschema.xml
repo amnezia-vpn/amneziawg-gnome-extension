@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="gnome-shell-extensions">
 	<schema
-	    id="org.gnome.shell.extensions.toggle-awg"
-	    path="/org/gnome/shell/extensions/toggle-awg/">
+	    id="org.gnome.shell.extensions.amneziawg"
+	    path="/org/gnome/shell/extensions/amneziawg/">
 
             <key name="interface" type="s">
-                <default>"awg1"</default>
+                <default>"awg0"</default>
                 <summary>"Interface"</summary>
 	    </key>
             <key name="icon-size" type="i">
