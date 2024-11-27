@@ -75,7 +75,7 @@ class Extension {
             this._settings.set_string('interface', 'awg0');
         }
         if (!this._settings.get_int('icon-size')) {
-            this._settings.set_int('icon-size', 32);
+            this._settings.set_int('icon-size', 24);
         }
         if (!this._settings.get_string('manual-theme')) {
             this._settings.set_string('manual-theme', 'dark');

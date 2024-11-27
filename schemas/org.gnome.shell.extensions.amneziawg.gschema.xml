@@ -9,7 +9,7 @@
                 <summary>"Interface"</summary>
 	    </key>
             <key name="icon-size" type="i">
-                <default>32</default>
+                <default>24</default>
                 <summary>"Icon Size"</summary>
                 <description>"The size of the toggle button icon in pixels"</description>
             </key>

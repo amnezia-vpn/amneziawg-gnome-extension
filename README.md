@@ -35,7 +35,7 @@ A GNOME Shell extension that allows you to toggle the **AmneziaWG** (via awg-qui
 
 ## Gnome Versions Support
 
- - 43 - `master` branch, `v1` tag
+ - 40|41|42|43|44 - `master` branch, `v3` tag
 
 ## Manual Installation
 
@@ -44,15 +44,18 @@ A GNOME Shell extension that allows you to toggle the **AmneziaWG** (via awg-qui
 ```bash
 git clone https://github.com/amnezia-vpn/amneziawg-gnome-extension.git ~/.local/share/gnome-shell/extensions/amneziawg@amnezia-vpn
 ```
-> add `--branch v<version tag>` if you need exact version
+
+> [!TIP]
+> add `--branch <version tag>` if you need exact version
 
 ### Get extension from ZIP:
 ```bash
-wget https://github.com/amnezia-vpn/amneziawg-gnome-extension/releases/download/v1/amneziawg@amnezia-vpn.shell-extension.zip
+wget https://github.com/amnezia-vpn/amneziawg-gnome-extension/releases/download/v3/amneziawg@amnezia-vpn.shell-extension.zip
 gnome-extensions install amneziawg@amnezia-vpn.shell-extension.zip --force
 ```
 
-> Replace `v1` in url with `v<version tag>` if you need exact version
+> [!TIP]
+> Replace `v3` in url with `<version tag>` if you need another version
 
 ### Apply extension
 
