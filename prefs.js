@@ -1,11 +1,9 @@
 const { GObject, Gtk } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const { GsettingsManager } = Me.imports.gsettingsManager;
 
-let settings;
-
-function init() {
-    settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.amneziawg');
-}
+function init() {}
 
 /**
  * Creates a labeled widget (label + child) inside a horizontal box.
@@ -35,17 +33,31 @@ function _createLabeledWidget(labelText, widget) {
  * @param {Object[]} options - Array of { id, label } objects for ComboBox options.
  * @returns {Gtk.Box} - The labeled ComboBox container.
  */
-function _createLabeledComboBox(labelText, settingKey, options) {
+function _createLabeledComboBox(gsettingsManager, labelText, settingKey, options) {
     const comboBox = new Gtk.ComboBoxText();
 
     options.forEach(option => comboBox.append(option.id, option.label));
-    comboBox.set_active_id(settings.get_string(settingKey));
+    comboBox.set_active_id(gsettingsManager.getValue(settingKey));
 
     comboBox.connect('changed', () => {
-        settings.set_string(settingKey, comboBox.get_active_id());
+        gsettingsManager.setValue(settingKey, comboBox.get_active_id());
     });
 
     return _createLabeledWidget(labelText, comboBox);
+}
+
+function _createResetBox(gsettingsManager) {
+    const box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+    const resetButton = new Gtk.Button({
+        label: 'Reset Settings',
+        halign: Gtk.Align.CENTER
+    });
+    resetButton.connect('clicked', () => {
+        gsettingsManager.resetAllKeys();
+        gsettingsManager.settings.sync();
+    });
+    box.append(resetButton);
+    return box;
 }
 
 /**
@@ -54,16 +66,34 @@ function _createLabeledComboBox(labelText, settingKey, options) {
  * @param {string} settingKey - The key for the setting to bind.
  * @returns {Object} - { box: Gtk.Box, entry: Gtk.Entry }.
  */
-function _createLabeledEntry(labelText, settingKey) {
-    const entry = new Gtk.Entry({
-        text: settings.get_string(settingKey),
+function _createLabeledEntry(gsettingsManager, labelText, settingKey) {
+    const box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+
+    const label = new Gtk.Label({
+        label: labelText,
+        halign: Gtk.Align.START,
         hexpand: true
     });
 
-    return {
-        box: _createLabeledWidget(labelText, entry),
-        entry
-    };
+    const entry = new Gtk.Entry({
+        text: gsettingsManager.getValue(settingKey),
+        hexpand: true
+    });
+
+    const saveButton = new Gtk.Button({
+        label: 'Save',
+    });
+
+    saveButton.connect('clicked', () => {
+    gsettingsManager.setValue('interface', entry.text);
+    gsettingsManager.settings.sync();
+    });
+
+    box.append(label);
+    box.append(entry);
+    box.append(saveButton);
+
+    return box;
 }
 
 /**
@@ -75,7 +105,7 @@ function _createLabeledEntry(labelText, settingKey) {
  * @param {number} step - Step increment.
  * @returns {Object} - { box: Gtk.Box, spinButton: Gtk.SpinButton }.
  */
-function _createLabeledSpinButton(labelText, settingKey, min, max, step) {
+function _createLabeledSpinButton(gsettingsManager, labelText, settingKey, min, max, step) {
     const adjustment = new Gtk.Adjustment({
         lower: min,
         upper: max,
@@ -84,12 +114,12 @@ function _createLabeledSpinButton(labelText, settingKey, min, max, step) {
 
     const spinButton = new Gtk.SpinButton({
         adjustment,
-        value: settings.get_int(settingKey),
+        value: gsettingsManager.getValue(settingKey),
         hexpand: true
     });
 
     spinButton.connect('value-changed', () => {
-        settings.set_int(settingKey, spinButton.get_value_as_int());
+        gsettingsManager.setValue(settingKey, spinButton.get_value_as_int());
     });
 
     return {
@@ -103,6 +133,7 @@ function _createLabeledSpinButton(labelText, settingKey, min, max, step) {
  * @returns {Gtk.Box} - The main container with all preferences.
  */
 function buildPrefsWidget() {
+    const gsettingsManager = new GsettingsManager();
     const widget = new Gtk.Box({
         orientation: Gtk.Orientation.VERTICAL,
         spacing: 10,
@@ -113,7 +144,8 @@ function buildPrefsWidget() {
     });
 
     // Interface Name Entry
-    const { box: interfaceBox, entry: interfaceEntry } = _createLabeledEntry(
+    const interfaceBox = _createLabeledEntry(
+        gsettingsManager,
         'Interface Name:',
         'interface'
     );
@@ -121,6 +153,7 @@ function buildPrefsWidget() {
 
     // Icon Size Spin Button
     const { box: iconSizeBox, spinButton: iconSizeSpinButton } = _createLabeledSpinButton(
+        gsettingsManager,
         'Icon Size:',
         'icon-size',
         16, // Minimum size
@@ -131,6 +164,7 @@ function buildPrefsWidget() {
 
     // Icon Theme ComboBox
     const iconThemeBox = _createLabeledComboBox(
+        gsettingsManager,
         'Icon Theme:',
         'manual-theme',
         [
@@ -139,19 +173,7 @@ function buildPrefsWidget() {
         ]
     );
     widget.append(iconThemeBox);
-
-    // Save Button
-    const saveButton = new Gtk.Button({
-        label: 'Save',
-        halign: Gtk.Align.CENTER
-    });
-
-    saveButton.connect('clicked', () => {
-        settings.set_string('interface', interfaceEntry.text);
-        settings.sync(); // Ensure settings are saved immediately
-    });
-
-    widget.append(saveButton);
+    widget.append(_createResetBox(gsettingsManager));
 
     return widget;
 }
